@@ -1,0 +1,16 @@
+img {
+    zoom: 5%;
+}
+
+.encabezado_logo {
+    text-align: center;
+    padding-top: 10px;
+}
+
+ul li {
+    list-style: none;
+}
+
+a mat-icon {
+    margin-right: 10px;
+}
