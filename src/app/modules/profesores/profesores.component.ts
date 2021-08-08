@@ -1,4 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { MatTableDataSource } from '@angular/material/table';
+import { Router } from '@angular/router';
+import { MessageService } from 'src/app/services/message.service';
+import { profesorFromDB } from '../../interfaces/profesorFromDB';
+import { ProfesoresService } from '../../services/profesores.service';
 
 @Component({
   selector: 'app-profesores',
@@ -7,9 +12,38 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ProfesoresComponent implements OnInit {
 
-  constructor() { }
+  public dataSource!: MatTableDataSource<profesorFromDB>;
+  public age: number;
+  
+  displayedColumns: string[] = ['name', 'patronus', 'age', 'image'];
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
+  constructor(
+    private profesoresService: ProfesoresService,
+    private messageService: MessageService,
+    private router: Router
+  ) { 
+    this.age = 0;
+   }
 
   ngOnInit(): void {
+    this.listarEstudiantes();
+  }
+
+  listarEstudiantes() {
+    this.profesoresService.listarProfesores().subscribe(
+      (response: Array<profesorFromDB>) => {
+        this.dataSource = new MatTableDataSource<profesorFromDB>(response);
+      },
+      (error: any) => {
+        this.messageService.showMessage("ERROR AL OBTENER LOS DATOS.");
+        this.router.navigate(["/"]);
+      }
+    )
   }
 
 }

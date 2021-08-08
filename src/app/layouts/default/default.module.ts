@@ -8,6 +8,7 @@ import { EstudiantesComponent } from 'src/app/modules/estudiantes/estudiantes.co
 import { ProfesoresComponent } from 'src/app/modules/profesores/profesores.component';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 
 
@@ -23,7 +24,8 @@ import { MatSidenavModule } from '@angular/material/sidenav';
     CommonModule,
     RouterModule,
     SharedModule,
-    MatSidenavModule
+    MatSidenavModule,
+    MatFormFieldModule
   ]
 })
 export class DefaultModule { }
