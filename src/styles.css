@@ -6,7 +6,3 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .box {
     padding: 30px;
 }
-
-img {
-    max-width: 80px;
-}

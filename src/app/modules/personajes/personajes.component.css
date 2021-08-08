@@ -10,3 +10,7 @@ table {
 .selectCasa {
   max-width: 200px;
 }
+
+img {
+  max-width: 80px;
+}
