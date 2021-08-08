@@ -22,7 +22,7 @@ export class EstudiantesService {
   }
 
   listarEstudiantes(): Observable<Array<estudianteFromDB>> {
-    const endpoint = `api/characters/students/`;
+    const endpoint = `api/characters/students`;
     const url = `${this.API_URL}${endpoint}`;
     return this.http.get<Array<estudianteFromDB>>(url);
   }

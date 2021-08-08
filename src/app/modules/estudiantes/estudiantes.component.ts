@@ -5,6 +5,7 @@ import { personajeFromDB } from 'src/app/interfaces/personajeFromDB';
 import { Router } from '@angular/router';
 import { estudianteFromDB } from 'src/app/interfaces/estudianteFromDB';
 import { EstudiantesService } from '../../services/estudiantes.service';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-estudiantes',
@@ -38,13 +39,22 @@ export class EstudiantesComponent implements OnInit {
   listarEstudiantes() {
     this.estudiantesService.listarEstudiantes().subscribe(
       (response: Array<estudianteFromDB>) => {
-        this.dataSource = new MatTableDataSource<estudianteFromDB>(response);
+        var mappedDataSource = response.map(estudiante => { 
+          estudiante.age = this.calcularEdad(estudiante.dateOfBirth);
+          return estudiante;
+        });
+        this.dataSource = new MatTableDataSource<estudianteFromDB>(mappedDataSource);
       },
       (error: any) => {
         this.messageService.showMessage("ERROR AL OBTENER LOS DATOS.");
         this.router.navigate(["/"]);
       }
     )
+  }
+
+  calcularEdad(dateOfBirth: string) {
+    var age = (dateOfBirth) ? moment().diff(dateOfBirth, 'years', false) : 0 ;
+    return age;
   }
 
 }

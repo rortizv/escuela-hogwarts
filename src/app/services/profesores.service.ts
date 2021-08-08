@@ -22,7 +22,7 @@ export class ProfesoresService {
   }
 
   listarProfesores(): Observable<Array<profesorFromDB>> {
-    const endpoint = `api/characters/staff/`;
+    const endpoint = `api/characters/staff`;
     const url = `${this.API_URL}${endpoint}`;
     return this.http.get<Array<profesorFromDB>>(url);
   }

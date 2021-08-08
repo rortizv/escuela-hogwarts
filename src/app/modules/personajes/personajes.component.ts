@@ -6,6 +6,7 @@ import { PersonajesService } from '../../services/personajes.service';
 import { MessageService } from '../../services/message.service';
 import { personajeFromDB } from 'src/app/interfaces/personajeFromDB';
 import { Router } from '@angular/router';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-personajes',
@@ -14,6 +15,7 @@ import { Router } from '@angular/router';
 })
 export class PersonajesComponent implements OnInit {
 
+  public selectedValue: string;
   public casaForm: FormGroup;
   public dataSource!: MatTableDataSource<personajeFromDB>;
   public age: number;
@@ -38,6 +40,7 @@ export class PersonajesComponent implements OnInit {
   ) { 
     this.casaForm = new FormGroup({});
     this.age = 0;
+    this.selectedValue = "";
    }
 
   ngOnInit(): void {
@@ -50,10 +53,14 @@ export class PersonajesComponent implements OnInit {
     })
   }
 
-  listarPersonajes(nombreCasa: string) {
-    this.personajeService.listarPersonajes(nombreCasa).subscribe(
+  listarPersonajes(event: any) {
+    this.personajeService.listarPersonajes(event.value).subscribe(
       (response: Array<personajeFromDB>) => {
-        this.dataSource = new MatTableDataSource<personajeFromDB>(response);
+        var mappedDataSource = response.map(personaje => { 
+          personaje.age = this.calcularEdad(personaje.dateOfBirth);
+          return personaje;
+        });
+        this.dataSource = new MatTableDataSource<personajeFromDB>(mappedDataSource);
       },
       (error: any) => {
         this.messageService.showMessage("ERROR AL OBTENER LOS DATOS.");
@@ -63,13 +70,7 @@ export class PersonajesComponent implements OnInit {
   }
 
   calcularEdad(dateOfBirth: string) {
-    var today = new Date();
-    var birthDate = new Date(dateOfBirth);
-    var age = today.getFullYear() - birthDate.getFullYear();
-    var m = today.getMonth() - birthDate.getMonth();
-    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-        age--;
-    }
+    var age = (dateOfBirth) ? moment().diff(dateOfBirth, 'years', false) : 0 ;
     return age;
   }
 

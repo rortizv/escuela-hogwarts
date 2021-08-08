@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
+import * as moment from 'moment';
 import { MessageService } from 'src/app/services/message.service';
 import { profesorFromDB } from '../../interfaces/profesorFromDB';
 import { ProfesoresService } from '../../services/profesores.service';
@@ -37,13 +38,22 @@ export class ProfesoresComponent implements OnInit {
   listarEstudiantes() {
     this.profesoresService.listarProfesores().subscribe(
       (response: Array<profesorFromDB>) => {
-        this.dataSource = new MatTableDataSource<profesorFromDB>(response);
+        var mappedDataSource = response.map(profesor => { 
+          profesor.age = this.calcularEdad(profesor.dateOfBirth);
+          return profesor;
+        });
+        this.dataSource = new MatTableDataSource<profesorFromDB>(mappedDataSource);
       },
       (error: any) => {
         this.messageService.showMessage("ERROR AL OBTENER LOS DATOS.");
         this.router.navigate(["/"]);
       }
     )
+  }
+
+  calcularEdad(dateOfBirth: string) {
+    var age = (dateOfBirth) ? moment().diff(dateOfBirth, 'years', false) : 0 ;
+    return age;
   }
 
 }

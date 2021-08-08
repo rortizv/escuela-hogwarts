@@ -10,21 +10,21 @@ import { personajeFromDB } from '../interfaces/personajeFromDB';
 export class PersonajesService {
 
   private API_URL: string;
-  private headers: HttpHeaders;
+  //private headers: HttpHeaders;
 
   constructor(
     private http: HttpClient
   ) {
     this.API_URL = environment.API_URL_CORE;
-    this.headers = new HttpHeaders()
-      .set('Content-Type', 'application/json')
-      .set('Accept', 'application/json');
+    // this.headers = new HttpHeaders()
+    //   .set('Content-Type', 'application/json')
+    //   .set('Accept', 'application/json');
   }
 
   listarPersonajes(filter?: string): Observable<Array<personajeFromDB>> {
     const endpoint = `api/characters/house/${filter}`;
     const url = `${this.API_URL}${endpoint}`;
-    return this.http.get<Array<personajeFromDB>>(url, { headers: this.headers });
+    return this.http.get<Array<personajeFromDB>>(url);
   }
   
 }
